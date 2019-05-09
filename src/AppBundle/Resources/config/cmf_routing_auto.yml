@@ -4,3 +4,18 @@ AppBundle\Document\DemoNewsContent:
     token_providers:
         date: [content_datetime, { method: getDate, date_format: Y-m-d }]
         title: [content_method, {method: getTitle, slugify: true }]
+
+AppBundle\Document\Page:
+    definitions:
+        - { uri_schema: '/page/{title}' }
+#    uri_schema: /page/{title}
+    token_providers:
+        title: [content_method, { method: getTitle }]
+
+AppBundle\Document\Post:
+    definitions:
+        - { uri_schema: '/post/{date}/{title}' }
+#    uri_schema: /post/{date}/{title}
+    token_providers:
+        date: [content_datetime, { method: getDate }]
+        title: [content_method, { method: getTitle }]
