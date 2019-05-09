@@ -1,0 +1,15 @@
+{# special template without the sidebar #}
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <div class="alert  alert-info  clearfix">
+        <p>This page is rendered using the <code>demo/template_explicit.html.twig</code> template. This template is directly configured in the route by using the <code>_template</code> setting.</p>
+
+        <a class="docref" href="http://symfony.com/doc/current/cmf/bundles/routing/dynamic.html#configuring-the-controller-for-a-route"><i class="glyphicon glyphicon-chevron-right"></i>Read about this feature in the CMF documentation.</a>
+    </div>
+
+    <h1>{{ cmfMainContent.title }}</h1>
+    {{ cmfMainContent.body|raw }}
+
+    {{ parent() }}
+{% endblock %}

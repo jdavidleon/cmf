@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content=" minimum-scale=1.0, maximum-scale=1.0, width=device-width, user-scalable=no">
+        <meta charset="utf-8" />
+
+        {{ sonata_seo_metadatas() }}
+        {{ sonata_seo_link_canonical() }}
+        {{ sonata_seo_lang_alternates() }}
+        {{ sonata_seo_title() }}
+
+        {% block includes %}
+            <link rel="stylesheet" href="{{ asset("assets/vendor/bootstrap.min.css") }}">
+            <link rel="stylesheet" href="{{ asset("assets/css/style.css") }}">
+        {% endblock %}
+
+        {% block top_scripts %}
+        {% endblock %}
+    </head>
+    <body>
+        <div class="navbar  navbar-default  navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{{ path('home_redirect') }}">
+                        <img alt="Symfony CMF" src="{{ asset("assets/images/symfony-cmf-logo.svg") }}">
+                    </a>
+                </div>
+
+                <div class="navbar-text  navbar-left">
+                    {% set currentItem = app_get_current_menu_item('main') %}
+                    {% if currentItem %}
+                    <ol class="breadcrumb  navbar-breadcrumb">
+                        <li></li>
+                        {% for item in knp_menu_get_breadcrumbs_array(currentItem) %}
+                        {% if loop.last %}
+                        <li class="active">{{ item.label }}</li>
+                        {% else %}
+                        <li><a href="{{ item.uri }}">{{ item.label }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                    </ol>
+                    {% endif %}
+                </div>
+                <div class="navbar-right">
+                    <ul class="nav  navbar-nav">
+                        <li><a href="{{ path('sonata_admin_dashboard') }}">Admin Dashboard</a></li>
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('logout') }}">Logout</a></li>
+                        {% endif %}
+                    </ul>
+
+                    {% block language_selector %}
+                    <div class="dropdown  navbar-dropdown">
+                        <a href="#" class="btn  btn-default  btn-xs  navbar-btn  dropdown-toggle" data-toggle="dropdown">Read this page in <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                                {% if cmfMainContent is defined %}
+                                    {{ locale_switcher(cmfMainContent, null, 'includes/switcher_links.html.twig') }}
+                                {% endif %}
+                        </ul>
+                    </div>
+                    {% endblock %}
+
+                    {% block raw_data %}
+                    <div class="dropdown  navbar-dropdown">
+                        <a href="#" class="btn  btn-default  btn-xs  navbar-btn  dropdown-toggle" data-toggle="dropdown">View raw page <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="raw-data-link" data-format="xml" title="{{ "cmf.raw_data_hint"|trans }}">XML</a></li>
+                            <li><a class="raw-data-link" data-format="json" title="{{ "cmf.raw_data_hint"|trans }}">JSON</a></li>
+                        </ul>
+                    </div>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+
+        {% block banner %}
+            <div class="jumbotron  banner">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h1>CMF Sandbox <small>Symfony Content Management Framework</small></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
+
+        <div class="main  container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="panel  panel-default  panel-nav">
+                        <div class="panel-heading">Navigation</div>
+
+                        {{ knp_menu_render('main', { template: 'includes/main_menu.html.twig' }) }}
+                    </div>
+                </div>
+
+                <div class="col-sm-9">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-7">
+                        {{ knp_menu_render("main", { depth: 1, template: 'includes/footer_menu.html.twig' }) }}
+                    </div>
+
+                    <div class="col-sm-5  text-right">
+                        {% block footer %}
+                        <p>Powered by <a href="http://cmf.symfony.com/">Symfony CMF</a> | Frontend editing funded in part by <a href="http://www.iks-project.eu/">IKS</a></p>
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="raw-data-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>{{ "cmf.raw_data"|trans }}</p>
+                        <pre id="raw-data"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% block bottom_scripts %}
+            <script src="{{ asset("assets/vendor/jquery.min.js") }}"></script>
+            <script src="{{ asset("assets/vendor/bootstrap.min.js") }}"></script>
+            <script src="{{ asset("assets/js/rawdata.js") }}"></script>
+        {% endblock %}
+    </body>
+</html>
